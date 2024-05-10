@@ -1,9 +1,12 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { NavLink } from "react-router-dom/cjs/react-router-dom";
+import ExpenseContext from "../store/expense-context";
 
 const SignIn = () => {
   const [signEmail, setSignEmail] = useState("");
   const [signPass, setSignPass] = useState("");
+
+  const ctx = useContext(ExpenseContext)
 
 
   const signInEmailHandler =(e)=>{
@@ -41,6 +44,7 @@ setSignPass(e.target.value)
     const data = await response.json();
     console.log(data.idToken);
     console.log("UserLogged in");
+    ctx.isLogIn();
 
     setSignEmail("");
     setSignPass("");

@@ -1,22 +1,23 @@
 import "./index.css";
 import SignUp from "./Component/SignUp";
 import SignIn from "./Component/SignIn";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { Route } from "react-router-dom/cjs/react-router-dom";
 import HomePage from "./Component/HomePage";
+import ExpenseContext from "./store/expense-context";
 function App() {
-    const [isLogIn ,setIsLogin] = useState(false)
+  const ctx = useContext(ExpenseContext)
   
 
   return (
     <div>
-      {!isLogIn &&
+      {!ctx.logIn &&
         <>
           <SignUp />
           <SignIn />
         </>
       }
-      {isLogIn && (
+      {ctx.logIn && (
         <Route path="/Home">
           <HomePage />
         </Route>
