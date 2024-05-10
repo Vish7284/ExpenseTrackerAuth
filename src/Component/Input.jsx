@@ -23,7 +23,7 @@ const Input = () => {
     }
   };
 
-  const formSubmitHandler = (e) => {
+  const formSubmitHandler = async(e) => {
     e.preventDefault();
     const obj = {
       email: email,
@@ -31,29 +31,60 @@ const Input = () => {
     };
 
     console.log(obj);
-    fetch(
-      "https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyC8idrG0OBLxrDZD1cJhoo2Z2VVhsnEFYc",{
-        method:"POST",
-        body:JSON.stringify({
-          email:email,
-          password:pass,
-          returnSecureToken:true,
+    
+  try {
+    const response = await fetch(
+      "https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyC8idrG0OBLxrDZD1cJhoo2Z2VVhsnEFYc",
+      {
+        method: "POST",
+        body: JSON.stringify({
+          email: email,
+          password: pass,
+          returnSecureToken: true,
         }),
-        headers:{
-          "Content-Type":"application/json"
-        }
-      }).then((res)=>{
-        if(res.ok){
-          return res.json()
-        }else{
-          return res.json().then((data)=>{
-            throw new Error("Data not saved to the firebase")
-          })
-        }
-      }).then((data)=>{
-        console.log(data.email);
-        console.log("User SuccesFully Registered");
-      }).catch(err => console.log(err));
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(
+        "Data not saved to the firebase: " + errorData.error.message
+      );
+    }
+
+    const data = await response.json();
+    console.log(data.email);
+    console.log("User Successfully Registered");
+  } catch (error) {
+    console.error(error);
+  }
+    // fetch(
+    //   "https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyC8idrG0OBLxrDZD1cJhoo2Z2VVhsnEFYc",{
+    //     method:"POST",
+    //     body:JSON.stringify({
+    //       email:email,
+    //       password:pass,
+    //       returnSecureToken:true,
+    //     }),
+    //     headers:{
+    //       "Content-Type":"application/json"
+    //     }
+    //   }
+      // }).then((res)=>{
+      //   if(res.ok){
+      //     return res.json()
+      //   }else{
+      //     return res.json().then((data)=>{
+      //       throw new Error("Data not saved to the firebase")
+      //     })
+      //   }
+      // }).then((data)=>{
+      //   console.log(data.email);
+      //   console.log("User SuccesFully Registered");
+      // }).catch(err => console.log(err));
     setEmail("");
     setPass("");
     setConPass("");
