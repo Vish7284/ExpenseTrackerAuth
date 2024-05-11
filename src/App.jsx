@@ -1,7 +1,7 @@
 import "./index.css";
 import SignUp from "./Component/SignUp";
 import SignIn from "./Component/SignIn";
-import { useContext, useState } from "react";
+import { useContext } from "react";
 import { Route } from "react-router-dom/cjs/react-router-dom";
 import HomePage from "./Component/HomePage";
 import ExpenseContext from "./store/expense-context";

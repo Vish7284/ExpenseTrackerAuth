@@ -49,11 +49,16 @@ const [token ,setToken] = useState(localToken)
     setToken(token);
     localStorage.setItem("token", JSON.stringify(token));
   };
+  const logOutHandler = ()=>{
+    setToken(null);
+    localStorage.removeItem("token")
+  }
   const value = {
     token:token,
     logIn: logInHandler,
     isLoggedIn: userIsLoggedIn,
     userData :userData,
+    logOut:logOutHandler,
   };
   return (
     <ExpenseContext.Provider value={value}>
