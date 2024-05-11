@@ -1,10 +1,17 @@
-import { useContext, useState } from "react";
+import { useContext, useState ,useEffect} from "react";
 import ExpenseContext from "../store/expense-context";
 
 const UserProfileForm = () => {
   const [name, setName] = useState("");
   const [imageUrl, setImageUrl] = useState("");
   const ctx = useContext(ExpenseContext)
+    useEffect(() => {
+      if (ctx.userData) {
+        setName(ctx.userData.displayName || "");
+        setImageUrl(ctx.userData.photoUrl || "");
+      }
+    }, [ctx.userData]);
+
 
   const nameChangeHandler = (e) => {
     setName(e.target.value);

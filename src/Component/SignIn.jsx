@@ -43,7 +43,7 @@ const SignIn = () => {
 
     const data = await response.json();
     console.log(data);
-    // localStorage.setItem("token", JSON.stringify(data.idToken));
+    // localStorage.setItem("token", JSON.stringify(data.idToken))
     ctx.logIn(data.idToken)
 
     setSignEmail("");

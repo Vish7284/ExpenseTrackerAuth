@@ -11,15 +11,20 @@ function App() {
 
   return (
     <div>
-      <SignUp />
-      <SignIn />
-
-      <Route path="/Home">
-        <HomePage />
-      </Route>
-      <Route path="/userdetail">
-        <UserProfileForm />
-      </Route>
+      {!ctx.isLoggedIn && (
+        <>
+          <SignUp />
+          <SignIn />
+        </>
+      )}
+     {ctx.isLoggedIn && <>
+        <Route path="/Home">
+          <HomePage />
+        </Route>
+        <Route path="/userdetail">
+          <UserProfileForm />
+        </Route>
+      </>}
     </div>
   );
 }
