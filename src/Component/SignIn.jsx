@@ -6,45 +6,45 @@ const SignIn = () => {
   const [signEmail, setSignEmail] = useState("");
   const [signPass, setSignPass] = useState("");
 
-  const ctx = useContext(ExpenseContext)
+  const ctx = useContext(ExpenseContext);
 
+  const signInEmailHandler = (e) => {
+    setSignEmail(e.target.value);
+  };
 
-  const signInEmailHandler =(e)=>{
-    setSignEmail(e.target.value)
-  }
-
-  const signPassHndler =(e)=>{
-setSignPass(e.target.value)
-  }
-  const signInFormSubmitHandler = async(e) => {
+  const signPassHndler = (e) => {
+    setSignPass(e.target.value);
+  };
+  const signInFormSubmitHandler = async (e) => {
     e.preventDefault();
     const signInData = {
       signEmail: signEmail,
       signPass: signPass,
     };
-
+    console.log(signInData);
     const response = await fetch(
-      "https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyC8idrG0OBLxrDZD1cJhoo2Z2VVhsnEFYc",{
-        method:'POST',
-        body:JSON.stringify({
-            email:signEmail,
-            password:signPass,
-            returnSecureToken:true,
+      "https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyC8idrG0OBLxrDZD1cJhoo2Z2VVhsnEFYc",
+      {
+        method: "POST",
+        body: JSON.stringify({
+          email: signEmail,
+          password: signPass,
+          returnSecureToken: true,
         }),
-        headers:{
-            "Content-Type":"application/json",
-        }
+        headers: {
+          "Content-Type": "application/json",
+        },
       }
     );
-    if(!response.ok){
-        const errorData = response.json();
-        throw new Error("Sign In Response not good",errorData.error.message)
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error("Sign In Response not good", errorData.error.message);
     }
 
     const data = await response.json();
-    console.log(data.idToken);
-    console.log("UserLogged in");
-    ctx.isLogIn();
+    console.log(data);
+    // localStorage.setItem("token", JSON.stringify(data.idToken));
+    ctx.logIn(data.idToken)
 
     setSignEmail("");
     setSignPass("");
@@ -79,7 +79,7 @@ setSignPass(e.target.value)
           </div>
 
           <button className="text-center rounded-xl bg-rose-300 hover:bg-rose-800 p-4">
-           <NavLink to="/Home">SignIn</NavLink>
+            SignIn
           </button>
         </form>
       </div>

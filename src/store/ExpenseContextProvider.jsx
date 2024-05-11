@@ -2,14 +2,17 @@ import { useState } from "react";
 import ExpenseContext from "./expense-context";
 
 const ExpenseContextProvider = (props) => {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const logInHandler = () => {
-    setIsLoggedIn((prev) => !prev);
+  const localToken = JSON.parse(localStorage.getItem("token"))
+const [token ,setToken] = useState(localToken)
+  const userIsLoggedIn = !!(token)
+  const logInHandler = (token) => {
+    setToken(token);
+    localStorage.setItem("token", JSON.stringify(token));
   };
-
   const value = {
-    logIn: isLoggedIn,
-    isLogIn: logInHandler,
+    token:token,
+    logIn: logInHandler,
+    isLoggedIn: userIsLoggedIn,
   };
   return (
     <ExpenseContext.Provider value={value}>

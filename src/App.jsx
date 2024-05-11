@@ -5,23 +5,21 @@ import { useContext, useState } from "react";
 import { Route } from "react-router-dom/cjs/react-router-dom";
 import HomePage from "./Component/HomePage";
 import ExpenseContext from "./store/expense-context";
+import UserProfileForm from "./Component/UserProfileForm";
 function App() {
-  const ctx = useContext(ExpenseContext)
-  
+  const ctx = useContext(ExpenseContext);
 
   return (
     <div>
-      {!ctx.logIn &&
-        <>
-          <SignUp />
-          <SignIn />
-        </>
-      }
-      {ctx.logIn && (
-        <Route path="/Home">
-          <HomePage />
-        </Route>
-      )}
+      <SignUp />
+      <SignIn />
+
+      <Route path="/Home">
+        <HomePage />
+      </Route>
+      <Route path="/userdetail">
+        <UserProfileForm />
+      </Route>
     </div>
   );
 }

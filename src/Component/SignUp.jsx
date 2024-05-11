@@ -61,30 +61,6 @@ const SignUp = () => {
   } catch (error) {
     console.error(error);
   }
-    // fetch(
-    //   "https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyC8idrG0OBLxrDZD1cJhoo2Z2VVhsnEFYc",{
-    //     method:"POST",
-    //     body:JSON.stringify({
-    //       email:email,
-    //       password:pass,
-    //       returnSecureToken:true,
-    //     }),
-    //     headers:{
-    //       "Content-Type":"application/json"
-    //     }
-    //   }
-      // }).then((res)=>{
-      //   if(res.ok){
-      //     return res.json()
-      //   }else{
-      //     return res.json().then((data)=>{
-      //       throw new Error("Data not saved to the firebase")
-      //     })
-      //   }
-      // }).then((data)=>{
-      //   console.log(data.email);
-      //   console.log("User SuccesFully Registered");
-      // }).catch(err => console.log(err));
     setEmail("");
     setPass("");
     setConPass("");
@@ -96,9 +72,9 @@ const SignUp = () => {
         <h1 className="text text-center font-bold">Sign Up</h1>
         <form onSubmit={formSubmitHandler} className="w-full">
           <div className="text-center">
-            <label htmlFor="email">Email</label>
+            <label htmlFor="email1">Email</label>
             <input
-              id="email"
+              id="email1"
               type="email"
               className="bg-slate-50 m-4 rounded-lg"
               value={email}
@@ -107,9 +83,9 @@ const SignUp = () => {
             />
           </div>
           <div className="text-center">
-            <label htmlFor="pass">Password</label>
+            <label htmlFor="pass1">Password</label>
             <input
-              id="pass"
+              id="pass1"
               type="password"
               className="bg-slate-50 m-4 rounded-lg"
               value={pass}
