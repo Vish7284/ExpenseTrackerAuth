@@ -8,6 +8,8 @@ import ExpenseContext from "./store/expense-context";
 import UserProfileForm from "./Component/UserProfileForm";
 import { Redirect } from "react-router-dom/cjs/react-router-dom";
 import ForgetPassword from "./Component/ForgetPassword";
+import ExpenseForm from "./Component/Expense/ExpenseForm";
+import DisplayingExpense from "./Component/Expense/DisplayingExpense";
 function App() {
   const ctx = useContext(ExpenseContext);
 
@@ -23,15 +25,17 @@ function App() {
           <Redirect to="/Home" />
           <Route path="/Home">
             <HomePage />
+            <ExpenseForm/>
+            <DisplayingExpense/>
           </Route>
           <Route path="/userdetail">
             <UserProfileForm />
           </Route>
         </>
       )}
-      <Route path="/forgotPassword">
+     {!ctx.isLoggedIn && <Route path="/forgotPassword">
         <ForgetPassword />
-      </Route>
+      </Route>}
     </div>
   );
 }

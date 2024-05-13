@@ -4,6 +4,7 @@ import ExpenseContext from "./expense-context";
 const ExpenseContextProvider = (props) => {
   const localToken = JSON.parse(localStorage.getItem("token"))
 const [token ,setToken] = useState(localToken)
+const [expenses,setExpenses] = useState([]);
 
  const [userData, setUserData] = useState(null);
 
@@ -53,12 +54,20 @@ const [token ,setToken] = useState(localToken)
     setToken(null);
     localStorage.removeItem("token")
   }
+
+  const addingExpenses =(expense)=>{
+setExpenses((prevExpense) =>{
+  return [...prevExpense,expense]
+})
+  }
   const value = {
-    token:token,
+    token: token,
     logIn: logInHandler,
     isLoggedIn: userIsLoggedIn,
-    userData :userData,
-    logOut:logOutHandler,
+    userData: userData,
+    logOut: logOutHandler,
+    expenses: expenses,
+    addExpense:addingExpenses,
   };
   return (
     <ExpenseContext.Provider value={value}>
