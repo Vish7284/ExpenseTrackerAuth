@@ -1,6 +1,7 @@
 import { useContext, useState } from "react";
-import { NavLink } from "react-router-dom/cjs/react-router-dom";
+
 import ExpenseContext from "../store/expense-context";
+import { NavLink } from "react-router-dom/cjs/react-router-dom";
 
 const SignIn = () => {
   const [signEmail, setSignEmail] = useState("");
@@ -42,6 +43,9 @@ const SignIn = () => {
     }
 
     const data = await response.json();
+    if (data && data.alertMessage) {
+      alert(data.alertMessage); // Display the alert message
+    }
     console.log(data);
     // localStorage.setItem("token", JSON.stringify(data.idToken))
     ctx.logIn(data.idToken)
@@ -77,10 +81,14 @@ const SignIn = () => {
               required
             />
           </div>
-
-          <button className="text-center rounded-xl bg-rose-300 hover:bg-rose-800 p-4">
-            SignIn
-          </button>
+          <div className="flex justify-between items-baseline">
+            <button className="text-center rounded-xl bg-rose-300 hover:bg-rose-800 p-4">
+              SignIn
+            </button>
+            <span className="bg-rose-200 rounded-3xl p-5 hover:bg-rose-500">
+              <NavLink to="/forgotPassword">Forgot Password</NavLink>
+            </span>
+          </div>
         </form>
       </div>
       <div className="flex justify-center items-baseline bg-cyan-200 p-4 rounded-lg">

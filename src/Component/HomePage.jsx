@@ -42,19 +42,24 @@ const HomePage = () => {
           </NavLink>
         </span>
       </header>
-      <body>
+      <main>
         <div>
           <button
-            className="bg-purple-300 hover:bg-purple-600 rounded-lg"
+            className="bg-purple-300 hover:bg-purple-600 rounded-lg pl-4"
             onClick={verifyEmailHandler}
           >
             Verify Email
           </button>
         </div>
         <div>
-          <button className="bg=rose-200 hover:bg-rose-700 rounded-lg" onClick={logOutHnalderHome}>LogOut</button>
+          <button
+            className="bg-rose-200 hover:bg-rose-700 rounded-lg pl-4"
+            onClick={logOutHnalderHome}
+          >
+            LogOut
+          </button>
         </div>
-      </body>
+      </main>
     </div>
   );
 };
