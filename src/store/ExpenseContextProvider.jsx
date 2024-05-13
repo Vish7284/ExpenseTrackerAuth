@@ -44,6 +44,31 @@ const [expenses,setExpenses] = useState([]);
      fetchUserData();
    }
  }, [token]);
+ 
+  useEffect(() => {
+
+    const fetchExpenses = async () => {
+      try {
+        const response = await fetch(
+          "https://expensetracker-3228d-default-rtdb.firebaseio.com/ExpenseData.json"
+        );
+        if (!response.ok) {
+          throw new Error("Failed to fetch expenses data");
+        }
+        const data = await response.json();
+        // Converting fetched data object to an array of expenses objects
+        const expensesArray = Object.keys(data).map((key) => ({
+          id: key,
+          ...data[key],
+        }));
+        setExpenses(expensesArray);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    fetchExpenses();
+  }, []);
 
   const userIsLoggedIn = !!(token)
   const logInHandler = (token) => {
@@ -57,7 +82,7 @@ const [expenses,setExpenses] = useState([]);
 
   const addingExpenses =(expense)=>{
 setExpenses((prevExpense) =>{
-  return [...prevExpense,expense]
+  return [...prevExpense,{...expense}]
 })
   }
   const value = {
@@ -69,6 +94,7 @@ setExpenses((prevExpense) =>{
     expenses: expenses,
     addExpense:addingExpenses,
   };
+  console.log(expenses);
   return (
     <ExpenseContext.Provider value={value}>
       {props.children}

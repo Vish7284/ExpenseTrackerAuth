@@ -4,6 +4,7 @@ import ExpenseContext from "../../store/expense-context";
 
 const DisplayingExpense = ()=>{
     const expCtx = useContext(ExpenseContext);
+    console.log(expCtx.expenses);
 
     return (
         <div>
