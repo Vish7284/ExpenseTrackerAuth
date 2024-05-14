@@ -43,9 +43,9 @@ const HomePage = () => {
         </span>
       </header>
       <main>
-        <div>
+        <div >
           <button
-            className="bg-purple-300 hover:bg-purple-600 rounded-lg pl-4"
+            className="bg-purple-300 hover:bg-purple-600 rounded-lg p-3"
             onClick={verifyEmailHandler}
           >
             Verify Email
@@ -53,7 +53,7 @@ const HomePage = () => {
         </div>
         <div>
           <button
-            className="bg-rose-200 hover:bg-rose-700 rounded-lg pl-4"
+            className="bg-rose-200 hover:bg-rose-700 rounded-lg p-2"
             onClick={logOutHnalderHome}
           >
             LogOut
