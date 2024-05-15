@@ -9,6 +9,7 @@ const counterReduser = (state = { counter: 0 }, action) => {
   if(action.type === "decrement"){
     return {
         counter : state.counter - 5,
+        
     }
   }
 
