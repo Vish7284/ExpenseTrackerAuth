@@ -1,16 +1,18 @@
-import { useContext, useState ,useEffect} from "react";
-import ExpenseContext from "../store/expense-context";
+import { useState ,useEffect} from "react";
+import { useSelector } from "react-redux";
+
 
 const UserProfileForm = () => {
   const [name, setName] = useState("");
   const [imageUrl, setImageUrl] = useState("");
-  const ctx = useContext(ExpenseContext)
+  let userExpnses = useSelector((state) => state.expenses.expenses);
+  console.log(userExpnses,"userExpense from the userProfile");
     useEffect(() => {
-      if (ctx.userData) {
-        setName(ctx.userData.displayName || "");
-        setImageUrl(ctx.userData.photoUrl || "");
+      if (userExpnses) {
+        setName(userExpnses.displayName || "");
+        setImageUrl(userExpnses.photoUrl || "");
       }
-    }, [ctx.userData]);
+    }, [userExpnses]);
 
 
   const nameChangeHandler = (e) => {

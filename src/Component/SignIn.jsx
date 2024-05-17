@@ -1,14 +1,20 @@
-import { useContext, useState } from "react";
-
-import ExpenseContext from "../store/expense-context";
+import { useEffect, useState } from "react";
 import { NavLink } from "react-router-dom/cjs/react-router-dom";
-
+import  { authActions } from "../store/auth";
+import { useDispatch } from "react-redux";
 const SignIn = () => {
   const [signEmail, setSignEmail] = useState("");
   const [signPass, setSignPass] = useState("");
 
-  const ctx = useContext(ExpenseContext);
+  const dispatch = useDispatch();
+   var localToken = localStorage.getItem("token");
 
+ useEffect(() => {
+  
+   if (localToken) {
+     dispatch(authActions.logIn(JSON.parse(localToken)));
+   }
+ }, [localToken]);
   const signInEmailHandler = (e) => {
     setSignEmail(e.target.value);
   };
@@ -43,12 +49,15 @@ const SignIn = () => {
     }
 
     const data = await response.json();
+    localStorage.setItem("token", JSON.stringify(data.idToken));
     if (data && data.alertMessage) {
       alert(data.alertMessage); // Display the alert message
     }
     console.log(data);
     // localStorage.setItem("token", JSON.stringify(data.idToken))
-    ctx.logIn(data.idToken)
+    // ctx.logIn(data.idToken)
+    const localToken = localStorage.getItem("token");
+    dispatch(authActions.logIn(localToken));
 
     setSignEmail("");
     setSignPass("");

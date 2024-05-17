@@ -2,14 +2,15 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 import App from "./App.jsx";
 import { BrowserRouter } from "react-router-dom/cjs/react-router-dom.min.js";
-import ExpenseContextProvider from "./store/ExpenseContextProvider.jsx";
+import { Provider } from "react-redux";
+import store from "./store/Index.jsx";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
-    <ExpenseContextProvider>
-      <BrowserRouter>
+    <BrowserRouter>
+      <Provider store={store}>
         <App />
-      </BrowserRouter>
-    </ExpenseContextProvider>
+      </Provider>
+    </BrowserRouter>
   </React.StrictMode>
 );

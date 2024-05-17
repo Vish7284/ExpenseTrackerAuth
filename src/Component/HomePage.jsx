@@ -1,9 +1,11 @@
-import { useContext } from "react";
-import { NavLink } from "react-router-dom/cjs/react-router-dom";
-import ExpenseContext from "../store/expense-context";
 
+import { NavLink } from "react-router-dom/cjs/react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { authActions } from "../store/auth";
 const HomePage = () => {
-  const ctx = useContext(ExpenseContext);
+var token = useSelector(state => state.auth.token);
+console.log(token);
+  const dispatch = useDispatch();
 
   const verifyEmailHandler = async () => {
     try {
@@ -11,26 +13,34 @@ const HomePage = () => {
         "https://identitytoolkit.googleapis.com/v1/accounts:sendOobCode?key=AIzaSyC8idrG0OBLxrDZD1cJhoo2Z2VVhsnEFYc",
         {
           method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
           body: JSON.stringify({
             requestType: "VERIFY_EMAIL",
-            idToken: ctx.token,
+            idToken: token,
           }),
         }
       );
 
       if (!response.ok) {
-        const errDat = await response.json();
-        throw new Error("nhi bhejenge verify email kya....");
+        const errData = await response.json();
+        throw new Error(
+          `Error:Nhi send hua verification mail`,errData
+        );
       }
+
       const data = await response.json();
-      console.log(data.email);
+      console.log("Email verification sent successfully:", data);
     } catch (err) {
-      console.log(err);
+      console.log("Failed to send email verification:", err.message);
     }
   };
 
-  const logOutHnalderHome =()=>{
-    ctx.logOut()
+
+  const logOutHanlderHome =()=>{
+    dispatch(authActions.logOut());
+    localStorage.removeItem("token");
   }
   return (
     <div className="bg-orange-200 flex justify-between items-center px-4 py-2">
@@ -54,7 +64,7 @@ const HomePage = () => {
         <div>
           <button
             className="bg-rose-200 hover:bg-rose-700 rounded-lg p-2"
-            onClick={logOutHnalderHome}
+            onClick={logOutHanlderHome}
           >
             LogOut
           </button>
