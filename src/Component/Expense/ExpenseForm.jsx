@@ -2,7 +2,7 @@ import { useState } from "react";
 
 import { expensesActions } from "../../store/expenses";
 import { useDispatch } from "react-redux";
-const ExpenseForm = () => {
+const ExpenseForm = (props) => {
    const [money, setMoney] = useState("");
    const [desc, setDesc] = useState("");
    const [cat, setCat] = useState("");
@@ -75,6 +75,7 @@ const ExpenseForm = () => {
    }
 
    // expCtx.addExpense(expenseData);
+   props.openForm = false;
    setMoney("");
    setDesc("");
    setCat("");

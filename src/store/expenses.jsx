@@ -1,25 +1,24 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-
 const InitialExpenseState = { expenses: [] };
 const expenseSlice = createSlice({
   name: "expesnes",
   initialState: InitialExpenseState,
   reducers: {
-    addExpenses(state,action){
- state.expenses = [...state.expenses ,action.payload
- ]
+    addExpenses(state, action) {
+      state.expenses = [...state.expenses, action.payload];
+      console.log(action.payload ,"form the addExpenses in expense reducers function");
     },
-    setExpenses(state,action){
-        state.expenses = [...action.payload];
-        console.log(state.expenses);
+    setExpenses(state, action) {
+      state.expenses = [...action.payload];
+      console.log(state.expenses);
     },
-    setDelete(state,action){
-        const newExpenses = state.expenses.filter((ele,item) =>{
-            ele.id != action.payload.id
-        })
-state.expenses = [...newExpenses]
-    }
+    setDelete(state, action) {
+      const newExpenses = state.expenses.filter((ele, item) => {
+        ele.id != action.payload.id;
+      });
+      state.expenses = [...newExpenses];
+    },
   },
 });
 

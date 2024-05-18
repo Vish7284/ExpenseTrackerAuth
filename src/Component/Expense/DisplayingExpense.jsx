@@ -1,11 +1,12 @@
 import {useEffect } from "react";
 import { expensesActions } from "../../store/expenses";
 import { useDispatch, useSelector } from "react-redux";
+import FileDownloader from "./FileDownLoader";
 
 const DisplayingExpense = () => {
   const dispatch = useDispatch();
   var token = useSelector((state) => state.auth.token);
-  // const isLoggedIN = useSelector((state) => state.auth.isAuthenticated);
+
   const expenses = useSelector((state) => state.expenses.expenses);
  
   useEffect(() => {
@@ -73,6 +74,8 @@ const DisplayingExpense = () => {
    
   // }, [token]);
 
+const totalExpense = expenses.reduce((acc, item) => acc + Number(item.money), 0);
+console.log(totalExpense);
   const deleteExpense = async (expenseId) => {
     try {
       const response = await fetch(
@@ -92,14 +95,13 @@ const DisplayingExpense = () => {
     }
   };
   const editExpenseHandler = (expenseId) => {
-    // expCtx.editExpense(expenseId);
-    // expCtx.updateExpense(expenseId)
+  
     console.log("Edit ho  gya ");
   };
 
   return (
-    <div>
-      <ul>
+    <div className="flex justify-center items-center">
+      <ul >
         {expenses.map((expense, index) => {
           return (
             <li
@@ -124,7 +126,10 @@ const DisplayingExpense = () => {
             </li>
           );
         })}
+      
       </ul>
+        {totalExpense >= 10000 && <button className="bg-purple-200 hover:bg-purple-600 p-3 rounded-2xl shadow-2xl">Activate Premium</button>}
+        <FileDownloader/>
     </div>
   );
 };
