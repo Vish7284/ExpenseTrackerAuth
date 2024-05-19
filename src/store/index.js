@@ -2,6 +2,7 @@ import {configureStore} from "@reduxjs/toolkit";
 import AuthReducer from './auth';
 import CounterReducer from './counter'
 import CartReducer from "./cart"
+import UIReducer from "./uiSlice"
 
 // const counterReduser = (state = initialState, action) => {
 //   if (action.type === "increment") {
@@ -34,7 +35,7 @@ import CartReducer from "./cart"
 // };
 
 const store = configureStore({
-  reducer: { counter:CounterReducer ,auth: AuthReducer, cart:CartReducer},
+  reducer: { counter:CounterReducer ,auth: AuthReducer, cart:CartReducer , UI:UIReducer},
 });
 
 
