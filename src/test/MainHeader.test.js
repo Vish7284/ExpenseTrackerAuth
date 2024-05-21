@@ -3,6 +3,7 @@ import MainHeader from "../components/Layout/MainHeader";
 import Counter from "../components/Counter";
 import Header from "../components/Header";
 import UserProfile from "../components/UserProfile";
+import userEvent from "@testing-library/user-event";
 
 describe("Task tests--", () => {
   test("Check ReduxCart --", () => {
@@ -25,4 +26,12 @@ describe("Task tests--", () => {
     const userText = screen.getByText(/'My user Profile'/);
     expect(userText).toBeInTheDocument();
   });
+
+  test("render cartButton to be click",()=>{
+    render(<Header/>);
+    const buttonElement = screen.getByRole("button");
+    userEvent.click(buttonElement);
+    const buttonclick = screen.getByText("ReduxAuth",{exact:false});
+    expect(buttonclick).toBeInTheDocument();
+  })
 });
