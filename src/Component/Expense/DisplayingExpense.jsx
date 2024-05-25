@@ -24,7 +24,7 @@ const DisplayingExpense = () => {
   // const finalEmail = useSelector((state) => state.auth.userId);
   const expenses = useSelector((state) => state.expenses.expenses);
 
-  console.log(token);
+  // console.log(finalEmail);
   var emailClean = localStorage.getItem("cleanedEmail");
   const addExpenseHandler = () => {
     setOpenForm((prevState) => !prevState);
@@ -118,7 +118,7 @@ const DisplayingExpense = () => {
             Add New Expense Here
           </button>
         ) : (
-          openForm && <ExpenseForm props={props} />
+          <ExpenseForm props={props} />
         )}
       </div>
       <div className="flex flex-col justify-center items-start">
@@ -150,6 +150,7 @@ const DisplayingExpense = () => {
           ))}
         </ul>
         <div className="flex justify-between items-center w-11/12 m-4">
+          <FileDownloader />
           {totalExpense >= 10000 && (
             <button
               className="bg-purple-200 hover:bg-purple-600 p-3 rounded-2xl shadow-2xl"
@@ -160,7 +161,6 @@ const DisplayingExpense = () => {
               Activate Premium
             </button>
           )}
-          <FileDownloader />
         </div>
       </div>
     </>

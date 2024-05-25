@@ -104,7 +104,7 @@ const SignUp = () => {
                 value={conPass}
                 onChange={conPassChangeHandler}
                 required
-              />{" "}
+              />
               {passMatch && <p>Passwords match!</p>}
               {!passMatch && conPass.length > 0 && (
                 <p>Passwords do not match!</p>

@@ -8,10 +8,10 @@ const expenseSlice = createSlice({
   reducers: {
     addExpense(state, action) {
       state.expenses = [...state.expenses, action.payload];
-      console.log(
-        action.payload,
-        "from the addExpense in expense reducers function"
-      );
+      // console.log(
+      //   action.payload,
+      //   "from the addExpense in expense reducers function"
+      // );
     },
     setExpenses(state, action) {
       state.expenses = [...action.payload];

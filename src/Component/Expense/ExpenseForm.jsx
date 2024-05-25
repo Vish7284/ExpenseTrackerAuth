@@ -1,12 +1,12 @@
-import { useState, useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { expensesActions } from "../../store/expenses";
 
 const ExpenseForm = (props) => {
- const { money, setMoney, desc, setDesc, cat, setCat,setOpenForm } = props.props;
+  const { money, setMoney, desc, setDesc, cat, setCat, setOpenForm } =
+    props.props;
   const dispatch = useDispatch();
   var finalCleanEmail = localStorage.getItem("cleanedEmail");
-  console.log(finalCleanEmail);
+  // console.log(finalCleanEmail);
 
   const moneyChangeHandler = (e) => {
     setMoney(e.target.value);
@@ -51,7 +51,7 @@ const ExpenseForm = (props) => {
       console.error("Error adding expense:", error);
     }
 
-    setOpenForm(false)
+    setOpenForm(false);
   };
 
   return (
