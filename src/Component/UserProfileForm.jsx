@@ -1,12 +1,13 @@
 import { useState ,useEffect} from "react";
 import { useSelector } from "react-redux";
+import { NavLink } from "react-router-dom/cjs/react-router-dom.min";
 
 
 const UserProfileForm = () => {
   const [name, setName] = useState("");
   const [imageUrl, setImageUrl] = useState("");
   let userExpnses = useSelector((state) => state.expenses.expenses);
-  console.log(userExpnses,"userExpense from the userProfile");
+  // console.log(userExpnses,"userExpense from the userProfile");
     useEffect(() => {
       if (userExpnses) {
         setName(userExpnses.displayName || "");
@@ -34,7 +35,7 @@ const UserProfileForm = () => {
    try {
     if(idToken){
 const response = await fetch(
-  "https://identitytoolkit.googleapis.com/v1/accounts:update?key=AIzaSyC8idrG0OBLxrDZD1cJhoo2Z2VVhsnEFYc",
+  "https://identitytoolkit.googleapis.com/v1/accounts:update?key=AIzaSyAseaLTI7oj3WmCgxCwIrKgPDEvdsxxE8s",
   {
     method: "POST",
     body: JSON.stringify({
@@ -94,7 +95,9 @@ console.log(data.email, data.displayName);
             Update
           </button>
         </form>
-        <button className="bg-purple-400 p-4 rounded-lg">Cancel</button>
+        <button className="bg-purple-400 p-4 rounded-lg">
+          <NavLink to="/Home">Cancel</NavLink>
+        </button>
       </div>
     </div>
   );

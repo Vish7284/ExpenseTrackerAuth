@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { NavLink } from "react-router-dom/cjs/react-router-dom";
-import  { authActions } from "../store/auth";
+import { authActions } from "../store/auth";
 import { useDispatch } from "react-redux";
 const SignIn = () => {
   const [signEmail, setSignEmail] = useState("");
@@ -30,7 +30,7 @@ const SignIn = () => {
     };
     console.log(signInData);
     const response = await fetch(
-      "https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyC8idrG0OBLxrDZD1cJhoo2Z2VVhsnEFYc",
+      "https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyAseaLTI7oj3WmCgxCwIrKgPDEvdsxxE8s",
       {
         method: "POST",
         body: JSON.stringify({
@@ -50,58 +50,61 @@ const SignIn = () => {
 
     const data = await response.json();
     localStorage.setItem("token", JSON.stringify(data.idToken));
-    if (data && data.alertMessage) {
-      alert(data.alertMessage); // Display the alert message
-    }
-    console.log(data);
-    // localStorage.setItem("token", JSON.stringify(data.idToken))
-    // ctx.logIn(data.idToken)
-    const localToken = localStorage.getItem("token");
-    dispatch(authActions.logIn(localToken));
+    const cleanedEmail = data.email.replace(/[@.]/g , "");
+  localStorage.setItem("cleanedEmail" ,JSON.stringify(cleanedEmail) )
+ 
+   
+    dispatch(authActions.logIn({token :data.idToken , userId : data.email}))
 
     setSignEmail("");
     setSignPass("");
   };
 
   return (
-    <div className="flex flex-col items-center w-screen">
-      <div className="bg-cyan-200 p-10 text-black text-center mb-6">
-        <h1 className="text text-center font-bold">Sign In</h1>
-        <form onSubmit={signInFormSubmitHandler} className="w-full">
-          <div className="text-center">
-            <label htmlFor="email">Email</label>
-            <input
-              id="email"
-              type="email"
-              className="bg-slate-50 m-4 rounded-lg"
-              value={signEmail}
-              onChange={signInEmailHandler}
-              required
-            />
-          </div>
-          <div className="text-center">
-            <label htmlFor="pass">Password</label>
-            <input
-              id="pass"
-              type="password"
-              className="bg-slate-50 m-4 rounded-lg"
-              value={signPass}
-              onChange={signPassHndler}
-              required
-            />
-          </div>
-          <div className="flex justify-between items-baseline">
-            <button className="text-center rounded-xl bg-rose-300 hover:bg-rose-800 p-4">
-              SignIn
-            </button>
-            <span className="bg-rose-200 rounded-3xl p-5 hover:bg-rose-500">
-              <NavLink to="/forgotPassword">Forgot Password</NavLink>
-            </span>
-          </div>
-        </form>
-      </div>
-      <div className="flex justify-center items-baseline bg-cyan-200 p-4 rounded-lg">
-        <button>Didn't have An Account? Sign Up</button>
+    <div className="flex justify-center items-center h-screen">
+      <div>
+        <div className="bg-cyan-200 p-10 text-black text-center mb-6 rounded-2xl">
+          <h1 className="text text-center font-bold">Sign In</h1>
+          <form onSubmit={signInFormSubmitHandler} className="w-full">
+            <div className="text-start">
+              <label htmlFor="email">Email</label>
+              <input
+                id="email"
+                type="email"
+                className="bg-slate-50 m-4 rounded-lg w-full"
+                value={signEmail}
+                onChange={signInEmailHandler}
+                required
+              />
+            </div>
+            <div className="text-start">
+              <label htmlFor="pass">Password</label>
+              <input
+                id="pass"
+                type="password"
+                className="bg-slate-50 m-4 rounded-lg w-full"
+                value={signPass}
+                onChange={signPassHndler}
+                required
+              />
+            </div>
+            <div className="mt-6">
+              <button className="text-center rounded-xl bg-rose-300 hover:bg-rose-800 p-4 w-full">
+                SignIn
+              </button>
+            </div>
+            <div className="mt-10">
+              <span className="bg-rose-200 rounded-3xl p-5 hover:bg-rose-500 ">
+                <NavLink to="/forgotPassword">Forgot Password</NavLink>
+              </span>
+            </div>
+          </form>
+        </div>
+        <div className="flex justify-center items-baseline bg-cyan-200 p-4 rounded-lg">
+          <button>
+            <NavLink to="/signUp">Didn't have An Account? Sign Up</NavLink>
+          </button>
+        </div>
       </div>
     </div>
   );

@@ -1,85 +1,79 @@
-import {useEffect } from "react";
-import { expensesActions } from "../../store/expenses";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { expensesActions } from "../../store/expenses";
 import FileDownloader from "./FileDownLoader";
+import ExpenseForm from "./ExpenseForm";
 
 const DisplayingExpense = () => {
-  const dispatch = useDispatch();
-  var token = useSelector((state) => state.auth.token);
+  const [openForm, setOpenForm] = useState(false);
+  const [money, setMoney] = useState("");
+  const [desc, setDesc] = useState("");
+  const [cat, setCat] = useState("");
 
+  const props = {
+    money,
+    setMoney,
+    desc,
+    setDesc,
+    cat,
+    setCat,
+    setOpenForm,
+  };
+  const dispatch = useDispatch();
+  const token = useSelector((state) => state.auth.token);
+  // const finalEmail = useSelector((state) => state.auth.userId);
   const expenses = useSelector((state) => state.expenses.expenses);
- 
+
+  console.log(token);
+  var emailClean = localStorage.getItem("cleanedEmail");
+  const addExpenseHandler = () => {
+    setOpenForm((prevState) => !prevState);
+  };
+
   useEffect(() => {
-    const fetchExpenses = async () => {
+    const fetchData = async () => {
       try {
         const response = await fetch(
-          "https://expensetracker-3228d-default-rtdb.firebaseio.com/ExpenseData.json"
+          `https://reduxcart-a19fd-default-rtdb.firebaseio.com/ExpenseData/${emailClean}.json`
         );
+
         if (!response.ok) {
-          throw new Error("Failed to fetch expenses data");
+          const errdata = await response.json();
+          throw new Error(
+            "nhi hua hai fetch data firebase se dekho kya problem hai",
+            errdata
+          );
         }
+
         const data = await response.json();
-        // Converting fetched data object to an array of expenses objects
-        const expensesArray = Object.keys(data).map((key) => ({
-          id: key,
-          ...data[key],
-        }));
-        dispatch(expensesActions.setExpenses(expensesArray));
+        const loadedExpenses = [];
+
+        for (const key in data) {
+          loadedExpenses.push({
+            id: key,
+            ...data[key],
+          });
+        }
+
+        console.log(loadedExpenses);
+        dispatch(expensesActions.setExpenses(loadedExpenses));
       } catch (error) {
-        console.error(error);
+        console.log(error);
       }
     };
 
-    fetchExpenses();
-    
-  }, []);
+    fetchData();
+  }, [dispatch]);
 
-  // useEffect(() => {
-  //   const fetchUserData = async () => {
-     
-  //     try {
-  //              console.log(token, "from the displaying the data");
+  const totalExpense = expenses.reduce(
+    (acc, item) => acc + Number(item.money),
+    0
+  );
 
-  //       const response = await fetch(
-  //         "https://identitytoolkit.googleapis.com/v1/accounts:lookup?key=AIzaSyC8idrG0OBLxrDZD1cJhoo2Z2VVhsnEFYc",
-  //         {
-  //           method: "POST",
-  //           body: JSON.stringify({
-  //             idToken: token,
-  //           }),
-  //           headers: {
-  //             "Content-Type": "application/json",
-  //           },
-  //         }
-  //       );
-        
-  //       if (!response.ok) {
-  //         throw new Error("Failed to fetch user data");
-  //       }
-  //       const userDataResponse = await response.json();
-  //       if (userDataResponse.users && userDataResponse.users.length > 0) {
-  //         // Assuming there's only one user
-  //         const user = userDataResponse.users[0];
-  //         console.log(user);
-  //        dispatch(expensesActions.setExpenses(user))
-  //       }
-  //     } catch (error) {
-  //       console.error("Error fetching user data:", error);
-  //     }
-  //   };
-
-  //   if (token) {
-  //     fetchUserData();
-  //   }
-   
-  // }, [token]);
-
-const totalExpense = expenses.reduce((acc, item) => acc + Number(item.money), 0);
-console.log(totalExpense);
   const deleteExpense = async (expenseId) => {
     try {
       const response = await fetch(
-        `https://expensetracker-3228d-default-rtdb.firebaseio.com/ExpenseData/${expenseId}.json`,
+        `https://reduxcart-a19fd-default-rtdb.firebaseio.com/ExpenseData/${emailClean}/${expenseId}.json`,
         {
           method: "DELETE",
         }
@@ -87,50 +81,90 @@ console.log(totalExpense);
       if (!response.ok) {
         throw new Error("Failed to delete expense");
       }
-      // Updating state to remove the deleted expense
-      console.log(expenseId);
-      dispatch(expensesActions.setDelete(expenseId));
+      dispatch(expensesActions.deleteExpense({ id: expenseId }));
     } catch (error) {
       console.error(error);
     }
   };
-  const editExpenseHandler = (expenseId) => {
-  
-    console.log("Edit ho  gya ");
+
+  const editExpenseHandler = async (expenseId) => {
+    try {
+      const response = await fetch(
+        `https://reduxcart-a19fd-default-rtdb.firebaseio.com/ExpenseData/${emailClean}/${expenseId}.json`
+      );
+      if (!response.ok) throw new Error("Failed to fetch expense");
+
+      const data = await response.json();
+      console.log(data);
+      setOpenForm(true);
+      setMoney(data.money);
+      setCat(data.cat);
+      setDesc(data.desc);
+      dispatch(expensesActions.editExpense({ id: expenseId, ...expenses }));
+      dispatch(expensesActions.deleteExpense({ id: expenseId }));
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (
-    <div className="flex justify-center items-center">
-      <ul >
-        {expenses.map((expense, index) => {
-          return (
+    <>
+      <div className="flex justify-center items-center mt-10">
+        {!openForm ? (
+          <button
+            className="bg-purple-300 hover:bg-purple-500 rounded-3xl p-5 m-5"
+            onClick={addExpenseHandler}
+          >
+            Add New Expense Here
+          </button>
+        ) : (
+          openForm && <ExpenseForm props={props} />
+        )}
+      </div>
+      <div className="flex flex-col justify-center items-start">
+        <ul className="w-full">
+          {expenses.map((expense, index) => (
             <li
               key={index}
-              className="bg-cyan-200 ml-5 flex justify-end rounded-2xl shadow-2xl items-center  mb-3 max-w-fit pl-5"
+              className="bg-cyan-200 ml-5 flex justify-between rounded-2xl shadow-2xl items-center mb-3 w-11/12 p-3"
             >
-              Rs.--{expense.money}
-              {expense.desc} {expense.cat}
-              <button
-                className="bg-rose-200 hover:bg-rose-500 rounded-xl p-2 ml-10"
-                onClick={() => deleteExpense(expense.id)}
-              >
-                {" "}
-                Delete
-              </button>
-              <button
-                className="bg-rose-200 hover:bg-rose-500 rounded-xl p-2 ml-10"
-                onClick={() => editExpenseHandler(expense.id)}
-              >
-                Edit
-              </button>
+              <div className="flex-1">
+                <span className="font-bold">Rs.--{expense.money}</span>
+                {expense.desc} {expense.cat}
+              </div>
+              <div className="flex">
+                <button
+                  className="bg-rose-200 hover:bg-rose-500 rounded-xl p-2 ml-10"
+                  onClick={() => deleteExpense(expense.id)}
+                >
+                  Delete
+                </button>
+                <button
+                  className="bg-rose-200 hover:bg-rose-500 rounded-xl p-2 ml-10"
+                  onClick={() => editExpenseHandler(expense.id)}
+                >
+                  Edit
+                </button>
+              </div>
             </li>
-          );
-        })}
-      
-      </ul>
-        {totalExpense >= 10000 && <button className="bg-purple-200 hover:bg-purple-600 p-3 rounded-2xl shadow-2xl">Activate Premium</button>}
-        <FileDownloader/>
-    </div>
+          ))}
+        </ul>
+        <div className="flex justify-between items-center w-11/12 m-4">
+          {totalExpense >= 10000 && (
+            <button
+              className="bg-purple-200 hover:bg-purple-600 p-3 rounded-2xl shadow-2xl"
+              onClick={() => {
+                console.log("Premium Activated...");
+              }}
+            >
+              Activate Premium
+            </button>
+          )}
+          <FileDownloader />
+        </div>
+      </div>
+    </>
   );
 };
+
 export default DisplayingExpense;

@@ -1,15 +1,13 @@
-import { useState } from "react";
-
+import { useState, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { expensesActions } from "../../store/expenses";
-import { useDispatch } from "react-redux";
+
 const ExpenseForm = (props) => {
-   const [money, setMoney] = useState("");
-   const [desc, setDesc] = useState("");
-   const [cat, setCat] = useState("");
-
- 
-
+ const { money, setMoney, desc, setDesc, cat, setCat,setOpenForm } = props.props;
   const dispatch = useDispatch();
+  var finalCleanEmail = localStorage.getItem("cleanedEmail");
+  console.log(finalCleanEmail);
+
   const moneyChangeHandler = (e) => {
     setMoney(e.target.value);
   };
@@ -17,73 +15,48 @@ const ExpenseForm = (props) => {
     setDesc(e.target.value);
   };
   const catChangeHandler = (e) => {
-    const selectedOption = e.target.options[e.target.selectedIndex].text;
-    setCat(selectedOption);
+    setCat(e.target.value);
   };
 
-//    const editExpense=async(expenseId)=>{
-// try {
-  
-//   const response = await fetch(
-//     `https://expensetracker-3228d-default-rtdb.firebaseio.com/ExpenseData/${expenseId}.json`,
-//     {
-//       method: "GET",
-//     }
-//   );
-//   if(!response.ok){
-//     throw new Error("nhi karenge update ya edit");
-//   };
-//   const data = await response.json();
-//   console.log(data);
-//   setCat(data.cat);
-//   setDesc(data.desc);
-//   setMoney(data.money)
-// } catch (error) {
-  
-// }
-//   }
- const addingExpenseFormHandler = async (e) => {
-   e.preventDefault();
-   const expenseData = {
-     money: money,
-     desc: desc,
-     cat: cat,
-   };
-   console.log(expenseData);
-   try {
-     const response = await fetch(
-       "https://expensetracker-3228d-default-rtdb.firebaseio.com/ExpenseData.json",
-       {
-         method: "POST",
-         body: JSON.stringify(expenseData),
-         headers: {
-           "Content-Type": "application/json",
-         },
-       }
-     );
-     if (!response.ok) {
-       const errDaaaata = await response.json();
-       throw new Error("nhi save hua data", errDaaaata);
-     }
+  const addingExpenseFormHandler = async (e) => {
+    e.preventDefault();
 
-     const data = await response.json();
-     console.log(data.name);
-    //  expCtx.addExpense(data);
-    dispatch(expensesActions.addExpenses(data))
-   } catch (error) {
-     console.log(error);
-   }
+    const expenseData = { money, desc, cat };
 
-   // expCtx.addExpense(expenseData);
-   props.openForm = false;
-   setMoney("");
-   setDesc("");
-   setCat("");
- };
+    try {
+      const response = await fetch(
+        `https://reduxcart-a19fd-default-rtdb.firebaseio.com/ExpenseData/${finalCleanEmail}.json`,
+        {
+          method: "POST",
+          body: JSON.stringify(expenseData),
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
+      if (!response.ok) throw new Error("Failed to add expense");
+
+      const data = await response.json();
+      console.log(data);
+      const expenseArr = { id: data.name, ...expenseData };
+      dispatch(expensesActions.addExpense(expenseArr));
+
+      setMoney("");
+      setDesc("");
+      setCat("");
+
+      console.log("Expense added successfully!");
+    } catch (error) {
+      console.error("Error adding expense:", error);
+    }
+
+    setOpenForm(false)
+  };
 
   return (
     <div className="bg-slate-300 m-5 rounded-lg">
-      <div className="flex justify-center items-center ">
+      <div className="flex justify-center items-center">
         <form
           className="bg-rose-200 p-6 inline-block rounded-2xl shadow-xl m-5"
           onSubmit={addingExpenseFormHandler}
@@ -96,6 +69,7 @@ const ExpenseForm = (props) => {
               className="rounded-xl p-2 ml-1"
               value={money}
               onChange={moneyChangeHandler}
+              required
             />
           </div>
           <div className="mb-4">
@@ -106,6 +80,7 @@ const ExpenseForm = (props) => {
               className="rounded-xl p-2 ml-3"
               value={desc}
               onChange={desChangeHandler}
+              required
             />
           </div>
           <div className="mb-4">
@@ -119,14 +94,14 @@ const ExpenseForm = (props) => {
               <option value="" disabled>
                 Select an option
               </option>
-              <option value="1">Food</option>
-              <option value="2">Petrol</option>
-              <option value="3">Health</option>
-              <option value="4">Fashion</option>
+              <option value="Food">Food</option>
+              <option value="Petrol">Petrol</option>
+              <option value="Health">Health</option>
+              <option value="Fashion">Fashion</option>
             </select>
           </div>
           <button className="bg-cyan-300 hover:bg-cyan-500 rounded-2xl border-blue-400 p-3 mt-4 ml-4 shadow-lg">
-            Add To Expense
+            Add to Expense
           </button>
         </form>
       </div>

@@ -25,7 +25,7 @@ const data = useSelector(state => state.expenses.expenses)
 
   return (
     <>
-      <span  onClick={handleCsvDownload}>
+      <span  onClick={handleCsvDownload} className="flex justify-end">
         <Link to="#" className ="bg-lime-300 hover:bg-lime-600 rounded-full p-4">Download File</Link>
       </span>
       <a id="download-link" ></a>
